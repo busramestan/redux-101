@@ -1,59 +1,23 @@
-import { decrement, increment, incrementByAmount, reset } from "./counterSlice";
-import { useAppDispatch, useAppSelector } from "./store";
+import { useGetTodosQuery, useGetUserQuery, useGetUsersQuery } from "./api";
 
 const App = () => {
-  const value = useAppSelector((state) => state.counter.value);
 
-  const dispatch = useAppDispatch(); //useAppDispatch sayesinde herhangi bir actionu store göndereceğiz 
-
-  const handleIncrement = () => {
-    dispatch(increment());
-  };
-  const handleDecrement = () => {
-    dispatch(decrement());
-  };
-  const handleReset = () => {
-    dispatch(reset());
-  };
-  const handleIncrementByValue = (value: number) => {
-    dispatch(incrementByAmount(value));
-  };
+  const { data } = useGetUsersQuery();
+  const { data: todos } = useGetTodosQuery();
+  const {data: user} = useGetUserQuery(8);
 
   return (
-    <div className="p-4">
-      <button
-        className="bg-blue-500 px-4 py-2 text-white rounded"
-        onClick={handleIncrement}
-      >
-        Arttır
-      </button>
-      <button
-        className="bg-red-500 px-4 py-2 text-white rounded"
-        onClick={handleDecrement}
-      >
-        Azalt
-      </button>
-      <button
-        className="bg-green-500 px-4 py-2 text-white rounded"
-        onClick={handleReset}
-      >
-        Reset
-      </button>
-
-      <button
-        className="bg-gray-500 px-4 py-2 text-white rounded"
-        onClick={() => handleIncrementByValue(5)}
-      >
-        5'er Arttır
-      </button>
-      <button
-        className="bg-pink-500 px-4 py-2 text-white rounded"
-        onClick={() => handleIncrementByValue(15)}
-      >
-        15'er Arttır
-      </button>
-      <br />
-      <h1 className="text-4xl">{value}</h1>
+    <div>
+      <h1 className="text-red-500 text-4xl">User</h1>
+      {user?.name}
+      <h1 className="text-red-500 text-4xl">Users</h1>
+      <ul>
+        <li>{data?.map((user) => <li>{user.name}</li>)}</li>
+      </ul>
+      <h1 className="text-red-500 text-4xl">Todos</h1>
+      <ul>
+        <li> {todos?.map((todo) => <li>{todo.title}</li>)}</li>
+      </ul>
     </div>
   );
 };
